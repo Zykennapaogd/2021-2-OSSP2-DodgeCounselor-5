@@ -1,5 +1,6 @@
 import json
 import pyrebase
+from requests.models import HTTPError
 
 def DeathKing(i):
     #데스수가 게임시간-5 보다 크거나 같으면 
@@ -76,15 +77,17 @@ with open("auth.json") as f:
 
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
-
-file_number=1
+file_number=0
 
 while(True):
+   
+    
     # matchData 불러오기. 이후에 반복문으로 바꿔야함 0부터 시작해서 없을때까지 반복
     with open('./matchData_Bronze1(10.29)/matchData'+str(file_number)+'.json','r',encoding='utf-8') as f: 
         global matchData
         matchData=json.load(f)
         file_number=file_number+1
+        
 
     list_name=[]    ## 유저의 아이디
     death_count=[]  ## 유저의 데스수
@@ -110,17 +113,38 @@ while(True):
     gameDuration = int(matchData['info']['gameDuration'])
     gameDuration = gameDuration/1000
     gameDuration = int(gameDuration/60)
-    print(gameDuration)
+    print("게임시간: " + gameDuration)
 
 
     for i in range(0,10,1):
-        dmg= DoneDamage(i)
-        spell=spellCheck(i)
-        noitem = Noitem(i)
-        death = DeathKing(i)
-        total = dmg+spell+noitem+death
-        data = {"id":list_name[i],'DeathKing':death, 'No_Item':noitem, 'SpellCheck':spell,'DoneDamage':dmg,'Total_Points':total}
-        db.child("users").child(list_name[i]).set(data)
+        user = db.child("users").order_by_child("id").equal_to(list_name[i]).get()
+        dic = user.val()
+        if len(dic) != 0:
+            dmg = DoneDamage(i)
+            spell = spellCheck(i)
+            noitem = Noitem(i)
+            death = DeathKing(i)
+            total = dmg+spell+noitem+death
+            death = death + dic[list_name[i]]['DeathKing']
+            noitem = noitem + dic[list_name[i]]['No_Item']
+            spell = spell + dic[list_name[i]]['SpellCheck'] 
+            dmg = dmg + dic[list_name[i]]['DoneDamage']
+            total = total + dic[list_name[i]]['Total_Points'] 
+            data = {"id":list_name[i],'DeathKing':death, 'No_Item':noitem, 'SpellCheck':spell,'DoneDamage':dmg,'Total_Points':total}
+            db.child("users").child(list_name[i]).update(data)
+
+        else:
+            dmg= DoneDamage(i)
+            spell=spellCheck(i)
+            noitem = Noitem(i)
+            death = DeathKing(i)
+            total = dmg+spell+noitem+death
+            data = {"id":list_name[i],'DeathKing':death, 'No_Item':noitem, 'SpellCheck':spell,'DoneDamage':dmg,'Total_Points':total}
+            db.child("users").child(list_name[i]).set(data) 
+
+
+
+        
 
 
 
@@ -152,49 +176,62 @@ while(True):
 
 
 
-#블럭주석 ALT + SHIFT + A
-""" trollDB={'Player': [{   'summonerName':' ',  
-                        'DeathKing':' ', 
-                        'No_Item':' ', 
-                        'SpellCheck':' ',
-                        'DoneDamage':' ',
-                        'Total_Points':' '}]
-     
-        }
 
-trollDB_copy={          'summonerName':' ',
-                        'DeathKing':' ', 
-                        'No_Item':' ', 
-                        'SpellCheck':' ',
-                        'DoneDamage':' ',
-                        'Total_Points':' '}
-     
-# 중복되는 소환사명이 있으면 append 안함. 대신 Player value의 리스트 번호를 저장       
-for i in range(0,10,1):
-    trollDB['Player'].append(dict(trollDB_copy)) # value에 딕셔너리형 리스트 추가 *dict()안하면 레퍼런스만 복사됨 아오 시발*
-    
 
-#실제 트롤력 계산 및 DB 업데이트
-for i in range(0,10,1):
-    trollDB['Player'][i]['summonerName'] = list_name[i]
-    #trollDB['Player'][i]['Total_Points'] = i
-    death = DeathKing(i)
-    trollDB['Player'][i]['DeathKing'] = death
-    item = Noitem(i)
-    trollDB['Player'][i]['No_Item'] = item
-    spell = spellCheck(i)
-    trollDB['Player'][i]['SpellCheck'] = spell
-    damage = DoneDamage(i)
-    trollDB['Player'][i]['DoneDamage'] = damage
-    total = 0
-    total = death+item+spell+damage
-    trollDB['Player'][i]['Total_Points'] = total
 
-   
 
-#print(len(trollDB['Player']))
-with open ('handlingData.json','w',encoding='utf-8') as outfile: ## 딕셔너리 json으로 인코딩 후 저장
-  json.dump(trollDB,outfile,ensure_ascii=False,indent=4) """
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
