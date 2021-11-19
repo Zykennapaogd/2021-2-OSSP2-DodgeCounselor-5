@@ -102,7 +102,7 @@ matchid=[]
 matchData={}
 fileNum=0
 idCount=0
-with open('test.json','r',encoding='utf-8') as f:
+with open(folderName + '/test.json','r',encoding='utf-8') as f:
     data = json.load(f)
 
 for key in data.keys():
