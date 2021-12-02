@@ -2,7 +2,7 @@ from requests.models import HTTPError
 from riotwatcher import LolWatcher
 from riotwatcher._apis.league_of_legends.SummonerApiV4 import SummonerApiV4
 from riotwatcher._apis.league_of_legends.MatchApiV5 import MatchApiV5
-key= 'RGAPI-13f8ee97-6f6e-4136-8374-b539844ba015' #제한시간 1일
+key= 'RGAPI-e540e4bc-8f24-4821-b8de-0e5cc8539d01' #제한시간 1일
 watcher = LolWatcher(key)
 
 def nameSlice() :   #멀티서치 기능을 위해 사용되는 함수
