@@ -27,9 +27,8 @@ def mainPage():
       userName = "우물쭈물대지마라"
       userInfo = fun.calculateScorePerUser(userName)
 
-      print("4번째 판에서 계산된 트롤력 :", userInfo['trollScore'][0])
-
-      
+      print("4번째 판에서 계산된 트롤력 :", userInfo['trollScore'][3])
+      print("deathKing 횟수 :", userInfo['deathKingCouunt'])
 
       return render_template('/dodgecall-홈페이지.html', returnValue = userInfo)
 
