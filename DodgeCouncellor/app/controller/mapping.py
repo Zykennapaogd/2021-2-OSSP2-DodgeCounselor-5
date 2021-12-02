@@ -24,13 +24,14 @@ fun.calcualteScorePerUser(유저명)함수가 반환하는 결과입니다!
 
 @main.route('/', methods = ['GET'])
 def mainPage():
-      userName = "우물쭈물대지마라"
-      userInfo = fun.calculateScorePerUser(userName)
+    userName = "우물쭈물대지마라"
+    userInfo = fun.calculateScorePerUser(userName)
 
-      print("4번째 판에서 계산된 트롤력 :", userInfo['trollScore'][3])
-      print("deathKing 횟수 :", userInfo['deathKingCouunt'])
+    #결과값 사용 예시입니다! 웹에서도 {{}}로 감싸 이와 같은 방법으로 사용하시면 됩니다!
+    print("4번째 판에서 계산된 트롤력 :", userInfo['trollScore'][3])
+    print("deathKing 횟수 :", userInfo['deathKingCouunt'])
 
-      return render_template('/dodgecall-홈페이지.html', returnValue = userInfo)
+    return render_template('/dodgecall-홈페이지.html', returnValue = userInfo)
 
 @main.route('/home', methods = ['GET'])
 def homePage():
