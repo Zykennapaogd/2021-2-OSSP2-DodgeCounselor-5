@@ -3,38 +3,35 @@ from riotwatcher import LolWatcher
 from riotwatcher._apis.league_of_legends.SummonerApiV4 import SummonerApiV4
 from riotwatcher._apis.league_of_legends.MatchApiV5 import MatchApiV5
 key = 'RGAPI-e540e4bc-8f24-4821-b8de-0e5cc8539d01' #제한시간 없음
-key2 = 'RGAPI-46d48291-2668-4d15-ac55-6cb8a706e3b0' #제한시간 1일
-watcher = LolWatcher(key)
-watcher2 = LolWatcher(key2)
+key2 = 'RGAPI-8ad28ad7-5d48-4303-85a0-977cd5baa26f' #제한시간 1일
+watcher = [
+    LolWatcher(key),
+    LolWatcher(key2)
+]
 
 def getSummonerInfo(playerName) :   #PlayerName을 이용하여 PlayerName에 따른 SummonerDTO를 반환해주는 함수
     #infoList에 플레이어들의 정보(SummonerDTO)가 리스트로 담김
-    return watcher.summoner.by_name("KR", playerName) 
+    return watcher[0].summoner.by_name("KR", playerName) 
 
 def getMatchBySummonerDTO(infoList, gameCount) :     #SummonDTO에서 얻을 수 있는 puuid를 이용하여 최근 n개의 게임에 대한
-    return watcher.match.matchlist_by_puuid("asia", infoList['puuid'], None, gameCount, None, "ranked")   #Puuid를 이용하여 각 유저의 랭크게임 gameCount개에 대한 MatchID 가져오기
+    return watcher[0].match.matchlist_by_puuid("asia", infoList['puuid'], None, gameCount, None, "ranked")   #Puuid를 이용하여 각 유저의 랭크게임 gameCount개에 대한 MatchID 가져오기
 
 def getUserLoc(matchInfo, playerName) :
     for i in range (10) :
         if playerName == matchInfo['info']['participants'][i]['summonerName'] :
             return i
 
-    print("못찾았음..")
-
 def getMatchInfoByMatchID(matchList) :
     matchInfo = []
     for i in range(len(matchList)) :
-        matchInfo.append(watcher2.match.by_id('asia', matchList[i]))
+        matchInfo.append(watcher[i%2].match.by_id('asia', matchList[i]))
     return matchInfo
 
 def DeathKing(matchInfo, userLoc):
     #데스수가 게임시간-5 보다 크거나 같으면 대가리 박은걸로 간주
     gameDuration = matchInfo['info']['gameDuration']
-    gameDuration = gameDuration / 1000
     gameDuration = gameDuration / 60
-    print("1번째 게임 시간 :", gameDuration)
-
-    print("userLoc :", userLoc)
+    print("게임 시간 :", gameDuration)
     death_count = matchInfo['info']['participants'][userLoc]['deaths']
     
     if death_count >= gameDuration - 5:
@@ -132,9 +129,6 @@ def goldDiffByPostion(matchInfo, userLoc) :
                 break
 
     # 같은 포지션의 두명   
-    print("같은 포지션의 상대", otherPlayerLoc)
-    print("내 골드", matchInfo['info']['participants'][userLoc]['goldEarned'])
-    print("상대 골드", matchInfo['info']['participants'][otherPlayerLoc]['goldEarned'])
     goldDiff = matchInfo['info']['participants'][otherPlayerLoc]['goldEarned'] / matchInfo['info']['participants'][userLoc]['goldEarned']      
 
     # 1.2배 이상 차이나면 그 값을 반환

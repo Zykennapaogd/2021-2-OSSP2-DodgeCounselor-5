@@ -3,18 +3,22 @@ from riotwatcher import LolWatcher
 from riotwatcher._apis.league_of_legends.SummonerApiV4 import SummonerApiV4
 from riotwatcher._apis.league_of_legends.MatchApiV5 import MatchApiV5
 import app.functions.functions as fun
+import time as t
 
-DeathKingScore = 5
-NoItemScore = 3
-BadSpellScore = 2
-DamageDiffWeight = 1.0
-GoldDiffWeight = 2.0
-visionScoreWeight = 2.0
+DeathKingScore = 20
+NoItemScore = 10
+BadSpellScore = 10
+DamageDiffWeight = 2
+GoldDiffWeight = 3
+visionScoreWeight = 3
 
 def calculateScorePerUser(userName) :
+    print("함수 시작")
+    start_time = t.time()
     summonerDTO = fun.getSummonerInfo(userName)
     matchList = fun.getMatchBySummonerDTO(summonerDTO, 20)
     matchInfos = fun.getMatchInfoByMatchID(matchList)
+    print("데이터 받아오기 끝 :", round(t.time() - start_time, 3))
 
     resultSet = {
         "deathKingCount" : 0,
@@ -23,7 +27,8 @@ def calculateScorePerUser(userName) :
         "weakDamageCount" : 0,
         "lackGoldCount" : 0,
         "visionLowCount" : 0,
-        "trollScore" : []
+        "trollScore" : [],
+        "totalScore" : 0
     }
 
     for i in range(len(matchInfos)) :
@@ -64,5 +69,9 @@ def calculateScorePerUser(userName) :
         if (visionDiff != 0) :
             resultSet['trollScore'][i] += (visionDiff * visionScoreWeight)
             resultSet['visionLowCount'] += 1
+
+        resultSet['totalScore'] += resultSet['trollScore'][i]
+
+    print("분석 끝 :", round(t.time() - start_time, 3))
 
     return resultSet
