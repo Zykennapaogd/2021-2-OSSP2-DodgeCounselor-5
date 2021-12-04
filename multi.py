@@ -162,10 +162,10 @@ def getScore(matchData,id,score,gameDuration):
         if matchData['info']['participants'][i]['summonerName'] == id:
             index = i
             break
-    death = matchData['info']['participants'][i]['deaths']
-    dmg = matchData['info']['participants'][i]['totalDamageDealtToChampions']
-    role = matchData['info']['participants'][i]['teamPosition']
-    gold = matchData['info']['participants'][i]['goldEarned']
+    death = matchData['info']['participants'][index]['deaths']
+    dmg = matchData['info']['participants'][index]['totalDamageDealtToChampions']
+    role = matchData['info']['participants'][index]['teamPosition']
+    gold = matchData['info']['participants'][index]['goldEarned']
 
     deathking = DeathKing(death,gameDuration)
     noitem = Noitem(index)
@@ -204,7 +204,9 @@ if __name__=='__main__':
             spell =  dic[id]['SpellCheck'] 
             dmg = dic[id]['DoneDamage']
             gold= dic[id]['goldDiffer']
-            total = dic[id]['Total_Points'] 
+            total = dic[id]['Total_Points']
+            data = {"id":id,'DeathKing':death, 'No_Item':noitem, 'SpellCheck':spell,'DoneDamage':dmg,'goldDiffer':gold,'Total_Points':total}
+            print(data)
 
             
 
