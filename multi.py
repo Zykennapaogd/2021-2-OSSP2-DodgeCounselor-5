@@ -1,7 +1,6 @@
 from requests.models import HTTPError
 from riotwatcher import LolWatcher
 import time
-from time import sleep
 import threading
 import pyrebase
 import json
