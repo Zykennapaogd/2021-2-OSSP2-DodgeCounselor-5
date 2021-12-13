@@ -9,6 +9,15 @@ watcher = [
     LolWatcher(key2)
 ]
 
+def nameSlice(input) :   #멀티서치 기능을 위해 사용되는 함수
+    player = input.split(". ")
+    for i in range(len(player)) :
+        for j in range(len(player[i])) :
+            if (player[i][j] == '님') and (player[i][j+1] == '이') and (player[i][j+2] == " ") :    
+                player[i] = player[i][0:j]
+                break
+    return player
+
 def getSummonerInfo(playerName) :   #PlayerName을 이용하여 PlayerName에 따른 SummonerDTO를 반환해주는 함수
     #infoList에 플레이어들의 정보(SummonerDTO)가 리스트로 담김
     return watcher[0].summoner.by_name("KR", playerName) 
@@ -155,8 +164,10 @@ def visionScoreDiffByPosition(matchInfo, userLoc) :
             if matchInfo['info']['participants'][j]['teamPosition'] == pos:
                 otherPlayerLoc = j
                 break
-
-    vScoreDiff = matchInfo['info']['participants'][otherPlayerLoc]['visionScore'] / matchInfo['info']['participants'][userLoc]['visionScore']
+    try :
+        vScoreDiff = matchInfo['info']['participants'][otherPlayerLoc]['visionScore'] / matchInfo['info']['participants'][userLoc]['visionScore']
+    except :
+        return 0
     # 1.2배 이상 차이나면 그 값을 반환
     if vScoreDiff >= 1.2 :
         return vScoreDiff

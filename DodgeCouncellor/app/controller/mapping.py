@@ -3,12 +3,21 @@
  
 from flask import Blueprint, request, render_template, flash, redirect, url_for
 from flask import current_app as app
-import app.functions.calculate as fun
+import app.functions.calculate as cal
+import app.functions.functions as fun
 import time
 import threading
 # 추가할 모듈이 있다면 추가
  
 main= Blueprint('main', __name__, url_prefix='/')
+
+'''
+미미또또님이 로비에 참가하셨습니다.
+흑백화님이 로비에 참가하셨습니다.
+보라돌이 앙앙님이 로비에 참가하셨습니다.
+우물쭈물대지마라님이 로비에 참가하셨습니다.
+Darius ever only님이 로비에 참가하셨습니다.
+'''
 
 '''
 fun.calcualteScorePerUser(유저명)함수가 반환하는 결과입니다!
@@ -34,30 +43,21 @@ def mainPage() :
 def homePage():
     print("측정결과창 출력")
     inputData = request.form["identification"]
-    
-    print(inputData)
-
-    userNames = [
-        "T1 Roach",
-        "Hide on bush",
-        "미안합니다sry",
-        "Hakunaa Matata",
-        "쪼렙이다말로하자"
-    ]
-    
-    infoList = []
+    userNames = fun.nameSlice(inputData)
 
     start_time = time.time()
-    
+    infoList = []
     threads = []
     for id in userNames :
-        t = threading.Thread(target = fun.calculateScorePerUser, args = (id, infoList))
+        t = threading.Thread(target = cal.calculateScorePerUser, args = (id, infoList))
         t.start()
         threads.append(t)
-    
 
     for t in threads :
         t.join()
+
+    for info in infoList :
+        print(info)
     
     print("총 소요 시간 :", time.time() - start_time)
     return render_template('측정결과창.html',  result = infoList)
