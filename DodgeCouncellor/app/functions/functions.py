@@ -1,3 +1,4 @@
+from typing import Mapping
 from requests.models import HTTPError
 from riotwatcher import LolWatcher
 from riotwatcher._apis.league_of_legends.SummonerApiV4 import SummonerApiV4
@@ -138,7 +139,7 @@ def goldDiffByPostion(matchInfo, userLoc) :
                 break
 
     # 같은 포지션의 두명   
-    goldDiff = matchInfo['info']['participants'][otherPlayerLoc]['goldEarned'] / matchInfo['info']['participants'][userLoc]['goldEarned']      
+    goldDiff = matchInfo['info']['participants'][otherPlayerLoc]['goldEarned'] / matchInfo['info']['participants'][userLoc]['goldEarned']
 
     # 1.2배 이상 차이나면 그 값을 반환
     if goldDiff >= 1.2 :

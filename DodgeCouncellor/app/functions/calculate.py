@@ -71,6 +71,8 @@ def calculateScorePerUser(userName, target) :
             resultSet['trollScore'][i] += (visionDiff * visionScoreWeight)
             resultSet['visionLowCount'] += 1
 
+        resultSet['trollScore'][i] = round(resultSet['trollScore'][i], 1)
+
         resultSet['totalScore'] += resultSet['trollScore'][i]
 
     print("분석 끝 :", round(t.time() - start_time, 3))
