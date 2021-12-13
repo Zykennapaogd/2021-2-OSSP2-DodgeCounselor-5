@@ -26,10 +26,16 @@ fun.calcualteScorePerUser(유저명)함수가 반환하는 결과입니다!
 
 @main.route('/', methods = ['GET'])
 def mainPage() :
+    print("홈페이지 출력")
     return render_template('/dodgecall-홈페이지.html')
 
-@main.route('/home', methods = ['GET'])
+@main.route('/home', methods = ['POST'])
 def homePage():
+    print("측정결과창 출력")
+    inputData = request.form["identification"]
+    
+    print(inputData)
+
     userNames = [
         "T1 Roach",
         "Hide on bush",
@@ -51,6 +57,6 @@ def homePage():
 
     for t in threads :
         t.join()
-
+    
     print("총 소요 시간 :", time.time() - start_time)
     return render_template('측정결과창.html',  result = infoList)
