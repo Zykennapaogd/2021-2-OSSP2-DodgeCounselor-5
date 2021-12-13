@@ -21,6 +21,7 @@ def calculateScorePerUser(userName, target) :
     print("데이터 받아오기 끝 :", round(t.time() - start_time, 3))
 
     resultSet = {
+        "userName" : userName,
         "deathKingCount" : 0,
         "badItemCount" : 0,
         "badSpellCount" : 0,

@@ -13,6 +13,7 @@ main= Blueprint('main', __name__, url_prefix='/')
 '''
 fun.calcualteScorePerUser(유저명)함수가 반환하는 결과입니다!
     resultSet = {
+        "userName" : String,
         "deathKingCount" : INT,
         "badItemCount" : INT,
         "badSpellCount" : INT,
