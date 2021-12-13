@@ -1,4 +1,4 @@
-from requests.models import HTTPError
+from requests.models import REDIRECT_STATI, HTTPError
 from riotwatcher import LolWatcher
 from riotwatcher._apis.league_of_legends.SummonerApiV4 import SummonerApiV4
 from riotwatcher._apis.league_of_legends.MatchApiV5 import MatchApiV5
@@ -8,9 +8,9 @@ import time as t
 DeathKingScore = 20
 NoItemScore = 10
 BadSpellScore = 10
-DamageDiffWeight = 2
-GoldDiffWeight = 3
-visionScoreWeight = 3
+DamageDiffWeight = 1
+GoldDiffWeight = 1
+visionScoreWeight = 1
 
 def calculateScorePerUser(userName, target) :
     print("함수 시작")
@@ -22,6 +22,9 @@ def calculateScorePerUser(userName, target) :
 
     resultSet = {
         "userName" : userName,
+        "championName" : [],
+        "teamPosition" : [],
+        "teamPositionKR" : [],
         "deathKingCount" : 0,
         "badItemCount" : 0,
         "badSpellCount" : 0,
@@ -37,6 +40,15 @@ def calculateScorePerUser(userName, target) :
         resultSet['trollScore'].append(0)
 
         userLoc = fun.getUserLoc(matchInfos[i], summonerDTO['name'])
+
+        #사용한 챔피언명 구하는 부분
+        resultSet['championName'].append(matchInfos[i]['info']['participants'][userLoc]['championName'])
+
+        #게임에서의 영문 포지션명 구하는 부분
+        resultSet['teamPosition'].append(matchInfos[i]['info']['participants'][userLoc]['teamPosition'])
+
+        #영문 포지션명을 한글로 변환
+        resultSet['teamPositionKR'].append(fun.getPositionKR(resultSet['teamPosition'][i]))
 
         #DeathKing 구하는 부분
         if (fun.DeathKing(matchInfos[i], userLoc)) :
@@ -74,6 +86,8 @@ def calculateScorePerUser(userName, target) :
         resultSet['trollScore'][i] = round(resultSet['trollScore'][i], 1)
 
         resultSet['totalScore'] += resultSet['trollScore'][i]
+
+    resultSet['totalScore'] = round(resultSet['totalScore'], 1)
 
     print("분석 끝 :", round(t.time() - start_time, 3))
 

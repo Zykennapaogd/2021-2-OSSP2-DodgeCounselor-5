@@ -26,16 +26,31 @@ def getSummonerInfo(playerName) :   #PlayerName을 이용하여 PlayerName에 �
 def getMatchBySummonerDTO(infoList, gameCount) :     #SummonDTO에서 얻을 수 있는 puuid를 이용하여 최근 n개의 게임에 대한
     return watcher[0].match.matchlist_by_puuid("asia", infoList['puuid'], None, gameCount, None, "ranked")   #Puuid를 이용하여 각 유저의 랭크게임 gameCount개에 대한 MatchID 가져오기
 
-def getUserLoc(matchInfo, playerName) :
+def getUserLoc(matchInfo, playerName) : #해당 게임에서 유저가 몇 번째 플레이어인지 찾아내서 위치 반환
     for i in range (10) :
         if playerName == matchInfo['info']['participants'][i]['summonerName'] :
             return i
 
-def getMatchInfoByMatchID(matchList) :
+def getMatchInfoByMatchID(matchList) :  #MatchID로 MatchINFO를 가져옴
     matchInfo = []
     for i in range(len(matchList)) :
         matchInfo.append(watcher[i%2].match.by_id('asia', matchList[i]))
     return matchInfo
+
+def getPositionKR(pos) :   #해당 게임에서 유저의 포지션을 한글로 반환함(탑, 정글, 미드, 원딜, 서폿)
+    if (pos == "TOP") :
+        return "탑"
+    elif (pos == "JUNGLE") :
+        return "정글"
+    elif (pos == "MIDDLE") :
+        return "미드"
+    elif (pos == "BOTTOM") :
+        return "원딜"
+    else :
+        return "서폿"
+
+
+
 
 def DeathKing(matchInfo, userLoc):
     #데스수가 게임시간-5 보다 크거나 같으면 대가리 박은걸로 간주
