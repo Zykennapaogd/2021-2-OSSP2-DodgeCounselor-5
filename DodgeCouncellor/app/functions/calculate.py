@@ -12,7 +12,7 @@ DamageDiffWeight = 2
 GoldDiffWeight = 3
 visionScoreWeight = 3
 
-def calculateScorePerUser(userName) :
+def calculateScorePerUser(userName, target) :
     print("함수 시작")
     start_time = t.time()
     summonerDTO = fun.getSummonerInfo(userName)
@@ -74,4 +74,4 @@ def calculateScorePerUser(userName) :
 
     print("분석 끝 :", round(t.time() - start_time, 3))
 
-    return resultSet
+    target.append(resultSet)

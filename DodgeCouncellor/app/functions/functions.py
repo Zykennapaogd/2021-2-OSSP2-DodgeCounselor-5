@@ -3,7 +3,7 @@ from riotwatcher import LolWatcher
 from riotwatcher._apis.league_of_legends.SummonerApiV4 import SummonerApiV4
 from riotwatcher._apis.league_of_legends.MatchApiV5 import MatchApiV5
 key = 'RGAPI-e540e4bc-8f24-4821-b8de-0e5cc8539d01' #제한시간 없음
-key2 = 'RGAPI-8ad28ad7-5d48-4303-85a0-977cd5baa26f' #제한시간 1일
+key2 = 'RGAPI-ba006b9f-bbef-4093-b2d0-084e727de2f1' #제한시간 1일
 watcher = [
     LolWatcher(key),
     LolWatcher(key2)

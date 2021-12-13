@@ -4,8 +4,8 @@
 from flask import Blueprint, request, render_template, flash, redirect, url_for
 from flask import current_app as app
 import app.functions.calculate as fun
-import app.functions.functions
-import time as t
+import time
+import threading
 # 추가할 모듈이 있다면 추가
  
 main= Blueprint('main', __name__, url_prefix='/')
@@ -25,20 +25,32 @@ fun.calcualteScorePerUser(유저명)함수가 반환하는 결과입니다!
 '''
 
 @main.route('/', methods = ['GET'])
-def mainPage():
-    userName = [
+def mainPage() :
+    userNames = [
         "T1 Roach",
         "Hide on bush",
         "미안합니다sry",
         "Hakunaa Matata",
         "쪼렙이다말로하자"
     ]
-    start_time = t.time()
-    for i in range(len(userName)) :
-        print((i+1),"번째 시작, 소요 시간 : ", round(t.time() - start_time, 3), "초")
-        fun.calculateScorePerUser(userName[i])
+    
+    infoList = []
 
-    return render_template('/dodgecall-홈페이지.html')
+    start_time = time.time()
+    
+    threads = []
+    for id in userNames :
+        t = threading.Thread(target = fun.calculateScorePerUser, args = (id, infoList))
+        t.start()
+        threads.append(t)
+    
+
+    for t in threads :
+        t.join()
+
+    print("총 소요 시간 :", time.time() - start_time)
+
+    return render_template('/dodgecall-홈페이지.html', result = infoList)
 
 @main.route('/home', methods = ['GET'])
 def homePage():
