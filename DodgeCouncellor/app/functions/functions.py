@@ -113,8 +113,10 @@ def damageDiffByPosition(matchInfo, userLoc):
     # 같은 포지션의 딜량을 나누어서 몇배인지 확인
     dmgDiff = matchInfo['info']['participants'][otherPlayerLoc]['totalDamageDealt'] / matchInfo['info']['participants'][userLoc]['totalDamageDealt']      
 
-    # 2배 이상 차이나면 그 값을 반환
-    if dmgDiff >= 2 :
+    # 3배 이상 차이나면 그냥 3을 반환, 그렇게 차이가 크지 않다면 그 값을 반환
+    if dmgDiff >= 3 :
+        return 3
+    elif dmgDiff >= 2 :
         return dmgDiff
     else:
         return 0
@@ -141,8 +143,10 @@ def goldDiffByPostion(matchInfo, userLoc) :
     # 같은 포지션의 두명   
     goldDiff = matchInfo['info']['participants'][otherPlayerLoc]['goldEarned'] / matchInfo['info']['participants'][userLoc]['goldEarned']
 
-    # 1.2배 이상 차이나면 그 값을 반환
-    if goldDiff >= 1.2 :
+    # 3배 넘게 차이나면 그냥 3을 반환, 그렇게 차이가 크지 않다면 값 자체를 반환
+    if goldDiff >= 3 :
+        return 3
+    elif goldDiff >= 1.2 :
         return goldDiff
     else:
         return 0
@@ -169,8 +173,11 @@ def visionScoreDiffByPosition(matchInfo, userLoc) :
         vScoreDiff = matchInfo['info']['participants'][otherPlayerLoc]['visionScore'] / matchInfo['info']['participants'][userLoc]['visionScore']
     except :
         return 0
-    # 1.2배 이상 차이나면 그 값을 반환
-    if vScoreDiff >= 1.2 :
+    
+    #3배 넘게 차이나면 그냥 3을 반환, 그렇게 차이가 크지 않다면 값 자체를 반환
+    if vScoreDiff >= 5 :
+        return 5
+    elif vScoreDiff >= 1.2 :
         return vScoreDiff
     else:
         return 0
