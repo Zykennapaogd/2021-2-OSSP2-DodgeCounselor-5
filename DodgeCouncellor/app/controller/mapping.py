@@ -60,4 +60,4 @@ def homePage():
         return render_template('/dodgecall-홈페이지.html')
     
     print("총 소요 시간 :", time.time() - start_time)
-    return render_template('측정결과창.html',  result = infoList)
+    return render_template('측정결과창.html', result = "infoLis")
