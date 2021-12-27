@@ -2,7 +2,7 @@ from requests.models import REDIRECT_STATI, HTTPError
 from riotwatcher import LolWatcher
 from riotwatcher._apis.league_of_legends.SummonerApiV4 import SummonerApiV4
 from riotwatcher._apis.league_of_legends.MatchApiV5 import MatchApiV5
-import app.functions.functions as fun
+import functions as fun
 import time as t
 
 DeathKingScore = 20

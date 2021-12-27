@@ -16,6 +16,15 @@ def nameSlice() :   #멀티서치 기능을 위해 사용되는 함수
                 break
     return player
 
+def getUserNames(TIER, DIVISION, PAGE) :    #특정 티어, 디비전, 페이지의 유저명 모두 가져오기
+    playerList=[] # 가져온 플레이어들의 소환사명을 저장하기 위한 리스트
+    players = watcher.league.entries('KR','RANKED_SOLO_5x5', TIER, DIVISION, PAGE, ) #리스트로 저장됨
+
+    for i in range(len(players)) :  #구해온 정보에서 소환사명만 빼서 저장
+        playerList.append(players[i]['summonerName'])
+
+    return playerList
+
 def getSummonerInfo(playerName) :   #PlayerName을 이용하여 PlayerName에 따른 SummonerDTO를 반환해주는 함수
     infoList = []   #infoList에 플레이어들의 정보(SummonerDTO)가 리스트로 담김
     for i in range(len(playerName)) :

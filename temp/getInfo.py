@@ -10,7 +10,7 @@ import os
 #DIVISION은 I, II, III, IV로 작성
 #PAGE는 int값으로 작성
 #Key도 여기에 입력하고 돌려주시면 됩니다!
-KEY ='RGAPI-19aec2c3-fbe2-4d52-870d-c33bcdf424fd'
+KEY ='RGAPI-c404d684-2d9e-4143-a8f6-a600774bb17b'   #Production Key
 TIER = "GOLD"
 DIVISION = "II"
 PAGE = 1
@@ -30,7 +30,7 @@ def createFolder(folderName) :
             os.makedirs(folderName)
     except OSError:
         print ('Error: Creating directory. ' +  folderName)
-        
+    
 
 #Main start
 
