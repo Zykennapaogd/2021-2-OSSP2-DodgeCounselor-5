@@ -3,7 +3,7 @@ from requests.models import HTTPError
 from riotwatcher import LolWatcher
 from riotwatcher._apis.league_of_legends.SummonerApiV4 import SummonerApiV4
 from riotwatcher._apis.league_of_legends.MatchApiV5 import MatchApiV5
-key = 'RGAPI-c404d684-2d9e-4143-a8f6-a600774bb17b' #Production key
+key = '' #키 입력해주세요!
 watcher = LolWatcher(key)
 
 
@@ -55,8 +55,6 @@ def getPositionKR(pos) :   #해당 게임에서 유저의 포지션을 한글로
         return "원딜"
     else :
         return "서폿"
-
-
 
 
 def DeathKing(matchInfo, userLoc):

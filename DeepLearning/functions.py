@@ -3,7 +3,7 @@ from requests.models import HTTPError
 from riotwatcher import LolWatcher
 from riotwatcher._apis.league_of_legends.SummonerApiV4 import SummonerApiV4
 from riotwatcher._apis.league_of_legends.MatchApiV5 import MatchApiV5
-key = 'RGAPI-c404d684-2d9e-4143-a8f6-a600774bb17b' #Production key
+key = '키 입력해주세요!' #Production key
 watcher = LolWatcher(key)
 
 
