@@ -4,11 +4,13 @@ GAMECOUNT = 5   #몇 게임에 대한 정보를 불러올지를 정하는 변수
     
 # 멀티서치용 예시입니다
 # VSCode 기준 Ctrl + K, Ctrl + U 하고 사용하시고, Ctrl + K, Ctrl + C하셔서 다시 주석처리 하시면 됩니다
-# 빡 베 인님이 로비에 참가하셨습니다.
-# 우물쭈물대지마라님이 로비에 참가하셨습니다.
-# 감비아사무총장님이 로비에 참가하셨습니다.
-# 오억이님이 로비에 참가하셨습니다.
-# Dake님이 로비에 참가하셨습니다.
+'''
+빡 베 인님이 로비에 참가하셨습니다.
+우물쭈물대지마라님이 로비에 참가하셨습니다.
+감비아사무총장님이 로비에 참가하셨습니다.
+오억이님이 로비에 참가하셨습니다.
+Dake님이 로비에 참가하셨습니다.
+'''
 
 # main start
 playerList = [] #유저의 이름이 담길 리스트
@@ -26,9 +28,6 @@ matchInfo = functions.getMatchInfoByMatchID(matchList)
 
 for i in range(5) : #analyzedResult에 게임 정보 각각을 저장
     analyzedResult.append(functions.analyzeGames(infoList[i]['puuid'], matchInfo[i]))
-
-
-
 
 # 유저들의 이름이 제대로 긁어졌는지 확인하기 위해 출력해본 코드입니다.
 for i in range(len(playerList)) :

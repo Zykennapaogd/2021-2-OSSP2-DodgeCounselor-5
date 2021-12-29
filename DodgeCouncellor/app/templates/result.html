@@ -4,7 +4,6 @@
         <meta charset="UTF-8">
         <title>측정 결과 창</title>
         <link href="../static/css/replace.css" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="../static/css/nicepage.css" media="screen">
     </head>
     <body>
         <div id = "header">
@@ -12,9 +11,10 @@
         </div>
 
         <div id = body>
+            <center>
             <table id = "infoList">
                 <tr height = "600px">
-                    {% for i in range(5) %}
+                    {% for i in range(length) %}
                         {% if result[i]['totalScore'] > 100 %}
                             <td class = redLight>
                         {% elif result[i]['totalScore'] > 40 %}
@@ -65,7 +65,8 @@
                     {% endfor %}
                 </tr>
             </table>
-
+            </center>
+            {% if length != 1 %}
             <div id = "summary">
                 <p>
                     팀원들의 트롤력 평균은 {{ averageScore }} 점입니다. <br>
@@ -82,10 +83,12 @@
                     {% endif%}
                 </p>
             </div>
+            {% endif %}
         </div>
-
-        <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-5464"><div class="u-clearfix u-sheet u-sheet-1">
-            <p class="u-small-text u-text u-text-variant u-text-1">공개SW프로젝트 닷지상담팀</p>
-          </div></footer>
+        <div id = "bottom">
+            <p style = "color:white;">
+                <br> 2021-2 게임 내 어뷰징 회피 팀 
+              </p>
+        </div>
     </body>
 </html>

@@ -3,12 +3,12 @@ from requests.models import HTTPError
 from riotwatcher import LolWatcher
 from riotwatcher._apis.league_of_legends.SummonerApiV4 import SummonerApiV4
 from riotwatcher._apis.league_of_legends.MatchApiV5 import MatchApiV5
-key = '' #키 입력해주세요!
+key = 'RGAPI-c404d684-2d9e-4143-a8f6-a600774bb17b' #키 입력해주세요!
 watcher = LolWatcher(key)
 
 
 def nameSlice(input) :   #멀티서치 기능을 위해 사용되는 함수
-    player = input.split(". ")
+    player = input.split("\n")
     for i in range(len(player)) :
         for j in range(len(player[i])) :
             if (player[i][j] == '님') and (player[i][j+1] == '이') and (player[i][j+2] == " ") :    
@@ -56,11 +56,14 @@ def getPositionKR(pos) :   #해당 게임에서 유저의 포지션을 한글로
     else :
         return "서폿"
 
-
 def DeathKing(matchInfo, userLoc):
     #데스수가 게임시간-5 보다 크거나 같으면 대가리 박은걸로 간주
     gameDuration = matchInfo['info']['gameDuration']
-    gameDuration = gameDuration / 60
+    if (gameDuration > 100000) :
+        gameDuration /= 60000
+    else :
+        gameDuration /= 60
+
     print("게임 시간 :", gameDuration)
     death_count = matchInfo['info']['participants'][userLoc]['deaths']
     
@@ -131,7 +134,10 @@ def damageDiffByPosition(matchInfo, userLoc):
                 break
 
     # 같은 포지션의 딜량을 나누어서 몇배인지 확인
-    dmgDiff = matchInfo['info']['participants'][otherPlayerLoc]['totalDamageDealt'] / matchInfo['info']['participants'][userLoc]['totalDamageDealt']      
+    try :
+        dmgDiff = matchInfo['info']['participants'][otherPlayerLoc]['totalDamageDealt'] / matchInfo['info']['participants'][userLoc]['totalDamageDealt']
+    except ZeroDivisionError:
+        return 0
 
     # 3배 이상 차이나면 그냥 3을 반환, 그렇게 차이가 크지 않다면 그 값을 반환
     if dmgDiff >= 3 :
@@ -161,7 +167,10 @@ def goldDiffByPostion(matchInfo, userLoc) :
                 break
 
     # 같은 포지션의 두명   
-    goldDiff = matchInfo['info']['participants'][otherPlayerLoc]['goldEarned'] / matchInfo['info']['participants'][userLoc]['goldEarned']
+    try :
+        goldDiff = matchInfo['info']['participants'][otherPlayerLoc]['goldEarned'] / matchInfo['info']['participants'][userLoc]['goldEarned']
+    except ZeroDivisionError:
+        return 0
 
     # 3배 넘게 차이나면 그냥 3을 반환, 그렇게 차이가 크지 않다면 값 자체를 반환
     if goldDiff >= 3 :
@@ -191,7 +200,7 @@ def visionScoreDiffByPosition(matchInfo, userLoc) :
                 break
     try :
         vScoreDiff = matchInfo['info']['participants'][otherPlayerLoc]['visionScore'] / matchInfo['info']['participants'][userLoc]['visionScore']
-    except :
+    except ZeroDivisionError:
         return 0
     
     #3배 넘게 차이나면 그냥 3을 반환, 그렇게 차이가 크지 않다면 값 자체를 반환

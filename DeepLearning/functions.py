@@ -6,7 +6,6 @@ from riotwatcher._apis.league_of_legends.MatchApiV5 import MatchApiV5
 key = '키 입력해주세요!' #Production key
 watcher = LolWatcher(key)
 
-
 def nameSlice(input) :   #멀티서치 기능을 위해 사용되는 함수
     player = input.split(". ")
     for i in range(len(player)) :
@@ -15,7 +14,6 @@ def nameSlice(input) :   #멀티서치 기능을 위해 사용되는 함수
                 player[i] = player[i][0:j]
                 break
     return player
-
 
 def getUserNames(TIER, DIVISION, PAGE) :    #특정 티어, 디비전, 페이지의 유저명 모두 가져오기
     playerList=[] # 가져온 플레이어들의 소환사명을 저장하기 위한 리스트
@@ -56,13 +54,13 @@ def getPositionKR(pos) :   #해당 게임에서 유저의 포지션을 한글로
     else :
         return "서폿"
 
-
-
-
 def DeathKing(matchInfo, userLoc):
     #데스수가 게임시간-5 보다 크거나 같으면 대가리 박은걸로 간주
     gameDuration = matchInfo['info']['gameDuration']
-    gameDuration = gameDuration / 60
+    if gameDuration >= 1000 :
+        gameDuration /= 6000
+    else :
+        gameDuration /= 60
     print("게임 시간 :", gameDuration)
     death_count = matchInfo['info']['participants'][userLoc]['deaths']
     

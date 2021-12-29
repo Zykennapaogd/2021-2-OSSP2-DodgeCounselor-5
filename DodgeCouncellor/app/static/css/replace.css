@@ -18,20 +18,29 @@
 
 #body {
     margin-top : 10px;
-    width:100%;
+    width : 100%;
     height : 1000px;
-    padding-left : 100px;
-    padding-right : 100px;
     background : #478AC9;
 }
 
 #summary {
     padding-top : 0px;
-    width : 100%;
+    width : 120%;
     height : 200px;
     padding-left : 850px;
     font-size : 30px;
     font-weight : bold;
+}
+
+#bottom {
+    position : absolute;
+    padding-top : 20px;
+    top : 1400;
+    left : 0;
+    background : #292e33;
+    width : 100%;
+    height : 250px;
+    text-align: center;
 }
 
 .redLight {
@@ -85,7 +94,8 @@
 
 .sum {
     padding-top : 0px;
-    font-size : 25px;
+    font-size : 20px;
+    text-align: center;
     font-weight : bold;
 }
 
