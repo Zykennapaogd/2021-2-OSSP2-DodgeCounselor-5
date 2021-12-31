@@ -22,7 +22,10 @@ def calculateScorePerUser(userName, target) :
 
     resultSet = {
         "userName" : userName,
+        "tier" : "",
+        "division" : "",
         "championName" : [],
+        "gameDuration" : [],
         "teamPosition" : [],
         "teamPositionKR" : [],
         "deathKingScore" : 0,
@@ -31,15 +34,34 @@ def calculateScorePerUser(userName, target) :
         "weakDamageScore" : 0,
         "lackGoldScore" : 0,
         "visionLowScore" : 0,
+        "win" : [],
+        "winCount" : 0,
+        "trollScorePerChampion" : [],
         "trollScore" : [],
         "totalScore" : 0
     }
 
+    fun.getTier(summonerDTO, resultSet) #티어와 디비전 먼저 세팅
+
     for i in range(len(matchInfos)) :
-        #처음에 0점짜리 추가
+
+        # 이번 판의 길이를 알아내기 위한 부분
+        # 나누는 부분이 if, else로 나눠져있는 이유는 11.21패치 이전에 실행된 게임들에 대해서는 시간 단위가 ms, 이후에는 s이기 때문.
+        gameDuration = matchInfos[i]['info']['gameDuration']
+        if (gameDuration > 100000) :
+            gameDuration /= 60000
+        else :
+            gameDuration /= 60
+
+        # 게임 길이를 구했다면 반올림 후 적용한다.
+        gameDuration = round(gameDuration, 1)
+        resultSet['gameDuration'].append(gameDuration)        
+
+        # 이번 판의 트롤력 계산을 위한 0점짜리 추가
         resultSet['trollScore'].append(0)
 
         userLoc = fun.getUserLoc(matchInfos[i], summonerDTO['name'])
+        resultSet['win'].append(matchInfos[i]['info']['participants'][userLoc]['win'])
 
         #사용한 챔피언명 구하는 부분
         resultSet['championName'].append(matchInfos[i]['info']['participants'][userLoc]['championName'])
@@ -87,6 +109,31 @@ def calculateScorePerUser(userName, target) :
 
         resultSet['totalScore'] += resultSet['trollScore'][i]
 
+        # 매 루프마다 챔피언별 트롤력 측정을 위한 계산 추가
+        try :
+            for k in range(len(resultSet['trollScorePerChampion'])) :
+                # 이미 목록에 있는 챔피언이면 챔피언에 값만 추가
+                if resultSet['championName'][i] == resultSet['trollScorePerChampion'][k]['championName'] :
+                    resultSet['trollScorePerChampion'][k]['trollScore'] += resultSet['trollScore'][i]
+                    raise Exception
+        except Exception :
+            continue
+
+        # 처음 보는 챔피언이면 새로운 목록 추가
+        resultSet['trollScorePerChampion'].append( {
+            "championName" : resultSet['championName'][i],
+            "trollScore" : resultSet['trollScore'][i]
+        })
+
     resultSet['totalScore'] = round(resultSet['totalScore'], 1)
+
+
+    # 매 판 승리했는지의 여부를 토대로 winCount값 설정
+    for i in range(len(resultSet['win'])) :
+        if resultSet['win'][i] :
+            resultSet['winCount'] += 1
+
+    # 제일 트롤력이 높은 챔피언 3개 정도만 우선 출력하기 위해 trollScorePerChampion을 정렬
+    resultSet['trollScorePerChampion'] = sorted(resultSet['trollScorePerChampion'], key = (lambda x : x['trollScore']), reverse = True)
 
     target.append(resultSet)

@@ -5,6 +5,14 @@
     <link rel="stylesheet" href="../static/css/mainPage.css">
   </head>
   <body>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <script>
+          alert("{{ messages[-1] }}")
+        </script>
+      {% endif %}
+    {% endwith %}
     <div id = "container">
       <div id = "title">
         <a href="/" style = "text-decoration : none; color : white;">트롤력 측정기</a>
