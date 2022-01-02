@@ -61,17 +61,24 @@ def soloUserInfo() :
     try :
         cal.calculateScorePerUser(userName, info)
 
-        for i in range(len(info)) :
-            temp = info[i].items()
-            for item in temp :
-                print(item)
-
-        return render_template('/result.html', result = info, length = len(info))
+        return render_template('/result.html', result = info, length = 1)
     except HTTPError as e:
-        flash("에러 발생 :", e)
-        return render_template('/mainPage.html')
+        if (str(e)[0:3] == "404") :
+            flash("소환사 이름을 제대로 입력해주세요")
+            return render_template('/mainPage.html')
+
+        elif (str(e)[0:3] == "403") :
+            flash("Riot 서버 오류입니다")
+            return render_template('/mainPage.html')
+
+        else :
+            flash("HTTPError 발생 : " + str(e))
+            return render_template('/mainPage.html')
+        
+
+        
     except jinja2.exceptions.UndefinedError as e :
-        flash("이름이 올바르지 않음", e)
+        flash("UndefinedError 발생 : " + str(e))
         return render_template('/mainPage.html')
 
 
@@ -81,7 +88,6 @@ def homePage():
     userNames = fun.nameSlice(inputData)
 
     try :
-        start_time = time.time()
         infoList = []
         threads = []
         averageScore = 0
@@ -99,24 +105,29 @@ def homePage():
         averageScore /= len(infoList)
         averageScore = round(averageScore, 1)
 
-        print("총 소요 시간 :", time.time() - start_time)
-
-        for i in range(len(infoList)) :
-            temp = infoList[i].items()
-            for item in temp :
-                print(item)
-            print("\n\n\n")
-
-        return render_template('/result.html', result = infoList, averageScore = averageScore, length = len(infoList))
+        return render_template('/result.html', result = infoList, averageScore = averageScore, length = 5)
 
     except HTTPError as e:
-        flash("에러 발생 :", e)
-        return render_template('/mainPage.html')
+        if (str(e)[0:3] == "404") :
+            flash("소환사 이름을 제대로 입력해주세요")
+            return render_template('/mainPage.html')
 
-    except ZeroDivisionError as e :
-        flash("이름이 올바르지 않음")
-        return render_template('/mainPage.html')
+        elif (str(e)[0:3] == "403") :
+            flash("Riot 서버 오류입니다")
+            return render_template('/mainPage.html')
+
+        elif (str(e)[0:4] == "list") :
+            flash("유저명이 잘못 입력되었습니다. 채팅창 입장 대화를 다시 입력해주세요")
+            return render_template('/mainPage.html')
+
+        else  :
+            flash("HTTPError 발생 : " + str(e))
+            return render_template('/mainPage.html')
+
+    except ZeroDivisionError :
+            flash("유저명이 잘못 입력되었습니다. 채팅창 입장 대화를 다시 입력해주세요")
+            return render_template('/mainPage.html')
 
     except jinja2.exceptions.UndefinedError as e :
-        flash("채팅창 입력 대화를 올바르게 입력해주세요")
+        flash("UndefinedError 발생 : " + str(e))
         return render_template('/mainPage.html')

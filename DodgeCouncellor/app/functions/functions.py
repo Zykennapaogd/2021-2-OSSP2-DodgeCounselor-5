@@ -4,7 +4,7 @@ from riotwatcher import LolWatcher
 from riotwatcher._apis.league_of_legends.SummonerApiV4 import SummonerApiV4
 from riotwatcher._apis.league_of_legends.MatchApiV5 import MatchApiV5
 from riotwatcher._apis.league_of_legends.LeagueApiV4 import LeagueApiV4
-key = '' #키 입력해주세요!
+key = 'RGAPI-c404d684-2d9e-4143-a8f6-a600774bb17b' #키 입력해주세요!
 watcher = LolWatcher(key)
 
 
@@ -30,8 +30,12 @@ def getUserNames(TIER, DIVISION, PAGE) :    #특정 티어, 디비전, 페이지
 def getTier(summonerDTO, info) :    
     result = watcher.league.by_summoner("KR", summonerDTO['id'])
 
-    info['tier'] = result[0]['tier']
-    info['division'] = result[0]['rank']
+    try :
+        info['tier'] = result[0]['tier']
+        info['division'] = result[0]['rank']
+    except Exception :
+        info['tier'] = "Unranked"
+        info['division'] = "Unranked"
 
 def getSummonerInfo(playerName) :   #PlayerName을 이용하여 PlayerName에 따른 SummonerDTO를 반환해주는 함수
     #infoList에 플레이어들의 정보(SummonerDTO)가 리스트로 담김
