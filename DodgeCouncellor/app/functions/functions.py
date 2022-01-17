@@ -33,6 +33,7 @@ def getUserNames(TIER, DIVISION, PAGE) :    #특정 티어, 디비전, 페이지
 
     return playerList
 
+# summonerDTO를 이용하여 info의 tier와 division값을 세팅해주는 함수
 def getTier(summonerDTO, info) :    
     result = watcher.league.by_summoner("KR", summonerDTO['id'])
 
@@ -80,7 +81,9 @@ def getEnemyLocation(matchData, playerLocation) :
             if position == matchData['info']['participants'][i]['teamPosition'] :
                 return i
 
-def getPositionKR(pos) :   #해당 게임에서 유저의 포지션을 한글로 반환함(탑, 정글, 미드, 원딜, 서폿)
+
+#해당 게임에서 유저의 포지션을 한글로 반환함(탑, 정글, 미드, 원딜, 서폿)
+def getPositionKR(pos) :  
     if (pos == "TOP") :
         return "탑"
     elif (pos == "JUNGLE") :
@@ -108,20 +111,6 @@ def getGameLength(matchInfo) :
 
 
 ''' 기본적인 요소들에 대한 트롤력을 측정하기 위해 사용되는 함수입니다 '''
-
-def DeathKing(matchInfo, userLoc):
-    #데스수가 게임시간-5 보다 크거나 같으면 대가리 박은걸로 간주
-    gameDuration = matchInfo['info']['gameDuration']
-    if (gameDuration > 100000) :
-        gameDuration /= 60000
-    else :
-        gameDuration /= 60
-    death_count = matchInfo['info']['participants'][userLoc]['deaths']
-    
-    if death_count >= gameDuration - 5:
-        return True
-    else:
-        return False
 
 def DeathKing(matchInfo, userLoc):
     #데스수가 게임시간-5 보다 크거나 같으면 대가리 박은걸로 간주
@@ -179,9 +168,6 @@ def UseCorrectSpell(singleMatchInfo, playerNum) : #한 게임에서 플레이어
 
         else :  #강타 안들었으면 True
             return True
-
-
-
 
 
 ''' 상대 플레이어와의 격차를 이용하여 트롤력을 측정할 때 사용되는 함수입니다 '''
@@ -297,8 +283,8 @@ def damageDiffWithData(matchInfo, userLoc, data) :
 
     damageDiff = dealtDamage / data_damage
 
-    if damageDiff >= 10 :
-        return 10
+    if damageDiff >= 5 :
+        return 30
     elif damageDiff >= 1.5 :
         return damageDiff
     else :
@@ -314,8 +300,8 @@ def goldDiffWithData(matchInfo, userLoc, data) :
 
     goldDiff = earnedGold / data_gold
 
-    if goldDiff >= 10 :
-        return 10
+    if goldDiff >= 5 :
+        return 30
     elif goldDiff >= 1.2 :
         return goldDiff
     else :
